@@ -6,6 +6,7 @@ import com.rodrigues.silva.marcos.forum.model.Curso
 import com.rodrigues.silva.marcos.forum.model.Topico
 import com.rodrigues.silva.marcos.forum.model.Usuario
 import com.rodrigues.silva.marcos.forum.service.TopicoService
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -32,7 +33,7 @@ class TopicoController(
     }
 
     @PostMapping
-    fun cadastrar(@RequestBody dto: NovoTopicoDto): Topico {
+    fun cadastrar(@RequestBody @Valid dto: NovoTopicoDto): Topico {
         return service.cadastrar(dto)
     }
 }
