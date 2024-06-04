@@ -2,6 +2,8 @@ package com.rodrigues.silva.marcos.forum.service
 
 import com.rodrigues.silva.marcos.forum.dto.NovoTopicoDto
 import com.rodrigues.silva.marcos.forum.dto.TopicoView
+import com.rodrigues.silva.marcos.forum.mapper.NovoTopicoMapper
+import com.rodrigues.silva.marcos.forum.mapper.TopicoViewMapper
 import com.rodrigues.silva.marcos.forum.model.Curso
 import com.rodrigues.silva.marcos.forum.model.Topico
 import com.rodrigues.silva.marcos.forum.model.Usuario
@@ -13,41 +15,27 @@ import kotlin.collections.ArrayList
 @Service
 class TopicoService(
     private var topicos: List<Topico> = ArrayList(),
-    private val cursoService: CursoService,
-    private val usuarioService: UsuarioService
+
+    private val topicoViewMapper: TopicoViewMapper,
+    private val novoTopicoMapper: NovoTopicoMapper,
 ) {
     fun listar(): List<TopicoView> {
-        return topicos.stream().map { t -> TopicoView (
-            id = t.id,
-            titulo = t.titulo,
-            mensagem = t.mensagem,
-            dataCriacao = t.dataCriacao,
-            status = t.status
-        ) }.collect(Collectors.toList())
+        return topicos.stream()
+            .map { topicoViewMapper.map(it) }
+            .collect(Collectors.toList())
     }
 
     fun buscarPorId(id: Long): TopicoView {
-        val topico =  topicos.stream().filter {
-            it.id == id
-        }.findFirst().get()
+        val topico =  topicos.stream()
+            .filter { it.id == id }
+            .findFirst().get()
 
-        return TopicoView(
-            id = topico.id,
-            titulo = topico.titulo,
-            mensagem = topico.mensagem,
-            dataCriacao = topico.dataCriacao,
-            status = topico.status
-        )
+        return topicoViewMapper.map(topico)
     }
 
     fun cadastrar(dto: NovoTopicoDto): Topico {
-        val topico = Topico(
-            id = topicos.size.toLong() + 1,
-            titulo = dto.titulo,
-            mensagem = dto.mensagem,
-            curso = cursoService.buscarPorId(dto.idCurso),
-            autor = usuarioService.buscarPorId(dto.idAutor)
-        )
+        val topico = novoTopicoMapper.map(dto)
+        topico.id = topicos.size.toLong() + 1
         topicos = topicos.plus(topico)
         return topico
     }
