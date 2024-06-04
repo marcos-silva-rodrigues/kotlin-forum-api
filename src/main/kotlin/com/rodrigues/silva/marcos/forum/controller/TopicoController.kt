@@ -1,6 +1,7 @@
 package com.rodrigues.silva.marcos.forum.controller
 
 import com.rodrigues.silva.marcos.forum.dto.NovoTopicoDto
+import com.rodrigues.silva.marcos.forum.dto.TopicoView
 import com.rodrigues.silva.marcos.forum.model.Curso
 import com.rodrigues.silva.marcos.forum.model.Topico
 import com.rodrigues.silva.marcos.forum.model.Usuario
@@ -21,12 +22,12 @@ class TopicoController(
 ) {
 
     @GetMapping
-    fun listar(): List<Topico> {
+    fun listar(): List<TopicoView> {
         return service.listar()
     }
 
     @GetMapping("/{id}")
-    fun buscarPorId(@PathVariable id: Long): Topico {
+    fun buscarPorId(@PathVariable id: Long): TopicoView {
         return service.buscarPorId(id)
     }
 
