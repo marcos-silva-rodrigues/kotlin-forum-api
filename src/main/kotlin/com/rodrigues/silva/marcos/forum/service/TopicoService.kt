@@ -1,5 +1,6 @@
 package com.rodrigues.silva.marcos.forum.service
 
+import com.rodrigues.silva.marcos.forum.dto.AtualizaoTopicoDto
 import com.rodrigues.silva.marcos.forum.dto.NovoTopicoDto
 import com.rodrigues.silva.marcos.forum.dto.TopicoView
 import com.rodrigues.silva.marcos.forum.mapper.NovoTopicoMapper
@@ -38,5 +39,22 @@ class TopicoService(
         topico.id = topicos.size.toLong() + 1
         topicos = topicos.plus(topico)
         return topico
+    }
+
+    fun atualizar(dto: AtualizaoTopicoDto) {
+        val topico =  topicos.stream()
+            .filter { it.id == dto.id }
+            .findFirst().get()
+
+        topicos = topicos.minus(topico).plus(Topico(
+            id = dto.id,
+            titulo = dto.titulo,
+            mensagem = dto.mensagem,
+            autor = topico.autor,
+            curso = topico.curso,
+            respostas = topico.respostas,
+            status = topico.status,
+            dataCriacao = topico.dataCriacao
+        ))
     }
 }
