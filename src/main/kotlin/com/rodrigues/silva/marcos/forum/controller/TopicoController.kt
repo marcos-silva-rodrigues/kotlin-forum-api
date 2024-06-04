@@ -1,22 +1,12 @@
 package com.rodrigues.silva.marcos.forum.controller
 
 import com.rodrigues.silva.marcos.forum.dto.AtualizaoTopicoDto
-import com.rodrigues.silva.marcos.forum.dto.AtualizapTopicoDto
 import com.rodrigues.silva.marcos.forum.dto.NovoTopicoDto
 import com.rodrigues.silva.marcos.forum.dto.TopicoView
-import com.rodrigues.silva.marcos.forum.model.Curso
 import com.rodrigues.silva.marcos.forum.model.Topico
-import com.rodrigues.silva.marcos.forum.model.Usuario
 import com.rodrigues.silva.marcos.forum.service.TopicoService
 import jakarta.validation.Valid
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
-import java.util.*
+import org.springframework.web.bind.annotation.*
 
 
 @RestController
@@ -41,8 +31,13 @@ class TopicoController(
     }
 
 
-    @PutMapping("/{id}")
-    fun atualizar(@RequestBody @Valid dto: AtualizaoTopicoDto){
+    @PutMapping
+    fun atualizar(@RequestBody @Valid dto: AtualizaoTopicoDto) {
         service.atualizar(dto)
+    }
+
+    @DeleteMapping("/{id}")
+    fun deletar(@PathVariable id: Long) {
+        service.deletar(id)
     }
 }

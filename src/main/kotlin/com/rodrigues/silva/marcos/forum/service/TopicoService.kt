@@ -5,13 +5,9 @@ import com.rodrigues.silva.marcos.forum.dto.NovoTopicoDto
 import com.rodrigues.silva.marcos.forum.dto.TopicoView
 import com.rodrigues.silva.marcos.forum.mapper.NovoTopicoMapper
 import com.rodrigues.silva.marcos.forum.mapper.TopicoViewMapper
-import com.rodrigues.silva.marcos.forum.model.Curso
 import com.rodrigues.silva.marcos.forum.model.Topico
-import com.rodrigues.silva.marcos.forum.model.Usuario
 import org.springframework.stereotype.Service
-import java.util.*
 import java.util.stream.Collectors
-import kotlin.collections.ArrayList
 
 @Service
 class TopicoService(
@@ -56,5 +52,12 @@ class TopicoService(
             status = topico.status,
             dataCriacao = topico.dataCriacao
         ))
+    }
+
+    fun deletar(id: Long) {
+        val topico = topicos.stream().filter { t ->
+            t.id == id
+        }.findFirst().get()
+        topicos = topicos.minus(topico)
     }
 }
