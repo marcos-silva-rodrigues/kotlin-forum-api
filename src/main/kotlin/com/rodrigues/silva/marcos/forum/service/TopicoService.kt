@@ -1,5 +1,6 @@
 package com.rodrigues.silva.marcos.forum.service
 
+import com.rodrigues.silva.marcos.forum.dto.NovoTopicoDto
 import com.rodrigues.silva.marcos.forum.model.Curso
 import com.rodrigues.silva.marcos.forum.model.Topico
 import com.rodrigues.silva.marcos.forum.model.Usuario
@@ -9,7 +10,9 @@ import kotlin.collections.ArrayList
 
 @Service
 class TopicoService(
-    private var topicos: List<Topico> = ArrayList()
+    private var topicos: List<Topico> = ArrayList(),
+    private val cursoService: CursoService,
+    private val usuarioService: UsuarioService
 ) {
     fun listar(): List<Topico> {
         return topicos
@@ -21,8 +24,15 @@ class TopicoService(
         }.findFirst().get()
     }
 
-    fun cadastrar(topico: Topico): Topico {
-        topicos.plus(topico)
+    fun cadastrar(dto: NovoTopicoDto): Topico {
+        val topico = Topico(
+            id = topicos.size.toLong() + 1,
+            titulo = dto.titulo,
+            mensagem = dto.mensagem,
+            curso = cursoService.buscarPorId(dto.idCurso),
+            autor = usuarioService.buscarPorId(dto.idAutor)
+        )
+        topicos = topicos.plus(topico)
         return topico
     }
 }

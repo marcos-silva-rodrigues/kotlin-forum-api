@@ -1,5 +1,6 @@
 package com.rodrigues.silva.marcos.forum.controller
 
+import com.rodrigues.silva.marcos.forum.dto.NovoTopicoDto
 import com.rodrigues.silva.marcos.forum.model.Curso
 import com.rodrigues.silva.marcos.forum.model.Topico
 import com.rodrigues.silva.marcos.forum.model.Usuario
@@ -30,7 +31,7 @@ class TopicoController(
     }
 
     @PostMapping
-    fun cadastrar(@RequestBody topico: Topico): Topico {
-        return service.cadastrar(topico)
+    fun cadastrar(@RequestBody dto: NovoTopicoDto): Topico {
+        return service.cadastrar(dto)
     }
 }
