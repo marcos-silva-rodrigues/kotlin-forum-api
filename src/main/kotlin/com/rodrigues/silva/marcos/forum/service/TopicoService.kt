@@ -3,6 +3,7 @@ package com.rodrigues.silva.marcos.forum.service
 import com.rodrigues.silva.marcos.forum.dto.AtualizaoTopicoDto
 import com.rodrigues.silva.marcos.forum.dto.NovoTopicoDto
 import com.rodrigues.silva.marcos.forum.dto.TopicoView
+import com.rodrigues.silva.marcos.forum.exception.NotFoundException
 import com.rodrigues.silva.marcos.forum.mapper.NovoTopicoMapper
 import com.rodrigues.silva.marcos.forum.mapper.TopicoViewMapper
 import com.rodrigues.silva.marcos.forum.model.Topico
@@ -16,6 +17,8 @@ class TopicoService(
     private val topicoViewMapper: TopicoViewMapper,
     private val novoTopicoMapper: NovoTopicoMapper,
 ) {
+
+    val notFoundMessage = "Tópico não encontrado"
     fun listar(): List<TopicoView> {
         return topicos.stream()
             .map { topicoViewMapper.map(it) }
@@ -25,7 +28,10 @@ class TopicoService(
     fun buscarPorId(id: Long): TopicoView {
         val topico =  topicos.stream()
             .filter { it.id == id }
-            .findFirst().get()
+            .findFirst()
+            .orElseThrow {
+                NotFoundException(notFoundMessage)
+            }
 
         return topicoViewMapper.map(topico)
     }
@@ -40,7 +46,10 @@ class TopicoService(
     fun atualizar(dto: AtualizaoTopicoDto): TopicoView {
         val topico =  topicos.stream()
             .filter { it.id == dto.id }
-            .findFirst().get()
+            .findFirst()
+            .orElseThrow {
+                NotFoundException(notFoundMessage)
+            }
 
         val topicoAtualizado = Topico(
             id = dto.id,
@@ -57,9 +66,14 @@ class TopicoService(
     }
 
     fun deletar(id: Long) {
-        val topico = topicos.stream().filter { t ->
-            t.id == id
-        }.findFirst().get()
+        val topico = topicos.stream()
+            .filter { t ->
+                t.id == id
+            }
+            .findFirst()
+            .orElseThrow {
+                NotFoundException(notFoundMessage)
+            }
         topicos = topicos.minus(topico)
     }
 }
