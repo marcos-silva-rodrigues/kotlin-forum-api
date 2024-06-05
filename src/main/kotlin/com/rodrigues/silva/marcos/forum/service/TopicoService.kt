@@ -8,8 +8,9 @@ import com.rodrigues.silva.marcos.forum.mapper.NovoTopicoMapper
 import com.rodrigues.silva.marcos.forum.mapper.TopicoViewMapper
 import com.rodrigues.silva.marcos.forum.model.Topico
 import com.rodrigues.silva.marcos.forum.repository.TopicoRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.util.stream.Collectors
 
 @Service
 class TopicoService(
@@ -20,10 +21,18 @@ class TopicoService(
 ) {
 
     val notFoundMessage = "Tópico não encontrado"
-    fun listar(): List<TopicoView> {
-        return repository
-            .findAll()
-            .map { topicoViewMapper.map(it) }
+
+    fun listar(
+        nomeCurso: String?,
+        paginacao: Pageable
+    ): Page<TopicoView> {
+        val topicos = if (nomeCurso != null) {
+            repository.findByCursoNome(nomeCurso, paginacao)
+        } else {
+            repository.findAll(paginacao)
+        }
+
+        return topicos.map { topicoViewMapper.map(it) }
     }
 
     fun buscarPorId(id: Long): TopicoView {
