@@ -2,6 +2,7 @@ package com.rodrigues.silva.marcos.forum.controller
 
 import com.rodrigues.silva.marcos.forum.dto.AtualizaoTopicoDto
 import com.rodrigues.silva.marcos.forum.dto.NovoTopicoDto
+import com.rodrigues.silva.marcos.forum.dto.TopicoPorCategoriaDto
 import com.rodrigues.silva.marcos.forum.dto.TopicoView
 import com.rodrigues.silva.marcos.forum.model.Topico
 import com.rodrigues.silva.marcos.forum.service.TopicoService
@@ -67,5 +68,10 @@ class TopicoController(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deletar(@PathVariable id: Long) {
         service.deletar(id)
+    }
+
+    @GetMapping("/relatorio")
+    fun relatorio(): List<TopicoPorCategoriaDto> {
+        return service.relatorio()
     }
 }

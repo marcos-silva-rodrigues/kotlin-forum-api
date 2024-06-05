@@ -2,6 +2,7 @@ package com.rodrigues.silva.marcos.forum.service
 
 import com.rodrigues.silva.marcos.forum.dto.AtualizaoTopicoDto
 import com.rodrigues.silva.marcos.forum.dto.NovoTopicoDto
+import com.rodrigues.silva.marcos.forum.dto.TopicoPorCategoriaDto
 import com.rodrigues.silva.marcos.forum.dto.TopicoView
 import com.rodrigues.silva.marcos.forum.exception.NotFoundException
 import com.rodrigues.silva.marcos.forum.mapper.NovoTopicoMapper
@@ -65,5 +66,9 @@ class TopicoService(
 
     fun deletar(id: Long) {
         repository.deleteById(id)
+    }
+
+    fun relatorio(): List<TopicoPorCategoriaDto> {
+        return repository.relatorio()
     }
 }
