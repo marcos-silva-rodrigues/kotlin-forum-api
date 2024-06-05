@@ -9,6 +9,7 @@ import jakarta.validation.Valid
 import org.apache.coyote.Response
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriBuilder
 import org.springframework.web.util.UriComponentsBuilder
@@ -31,6 +32,7 @@ class TopicoController(
     }
 
     @PostMapping
+    @Transactional
     fun cadastrar(
         @RequestBody @Valid dto: NovoTopicoDto,
         uriBuilder: UriComponentsBuilder
@@ -43,12 +45,14 @@ class TopicoController(
 
 
     @PutMapping
+    @Transactional
     fun atualizar(@RequestBody @Valid dto: AtualizaoTopicoDto): ResponseEntity<TopicoView> {
         val topicoView = service.atualizar(dto)
         return ResponseEntity.ok(topicoView)
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deletar(@PathVariable id: Long) {
         service.deletar(id)
