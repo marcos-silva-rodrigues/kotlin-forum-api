@@ -22,6 +22,7 @@ class SecurityConfiguration{
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http {
             authorizeRequests {
+                authorize("/topicos", hasAuthority("LEITURA_ESCRITA"))
                 authorize("*", authenticated)
             }
             sessionManagement {
