@@ -1,13 +1,10 @@
 package com.rodrigues.silva.marcos.forum.config
 
-import com.rodrigues.silva.marcos.forum.repository.UsuarioRepository
-import com.rodrigues.silva.marcos.forum.service.UsuarioService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
-import org.springframework.security.authentication.AuthenticationProvider
+import org.springframework.security.authentication.ProviderManager
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.invoke
@@ -25,7 +22,7 @@ class SecurityConfiguration{
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http {
             authorizeRequests {
-                authorize("*", permitAll)
+                authorize("*", authenticated)
             }
             sessionManagement {
                 sessionCreationPolicy = SessionCreationPolicy.STATELESS
@@ -40,22 +37,17 @@ class SecurityConfiguration{
     }
 
     @Bean
-    fun userDetailsService(userRepository: UsuarioRepository): UserDetailsService =
-        UsuarioService(userRepository)
-
-    @Bean
-    fun authenticationProvider(userRepository: UsuarioRepository): AuthenticationProvider =
-        DaoAuthenticationProvider()
-            .also {
-                it.setUserDetailsService(userDetailsService(userRepository))
-                it.setPasswordEncoder(encoder())
-            }
-
-    @Bean
     fun encoder(): PasswordEncoder = BCryptPasswordEncoder()
 
     @Bean
-    fun authenticationManager(config: AuthenticationConfiguration): AuthenticationManager =
-        config.authenticationManager
+    fun authenticationManager(
+        userDetailsService: UserDetailsService,
+        passwordEncoder: PasswordEncoder): AuthenticationManager {
+        val authenticationProvider = DaoAuthenticationProvider()
+        authenticationProvider.setUserDetailsService(userDetailsService)
+        authenticationProvider.setPasswordEncoder(passwordEncoder)
+
+        return ProviderManager(authenticationProvider)
+    }
 
 }
