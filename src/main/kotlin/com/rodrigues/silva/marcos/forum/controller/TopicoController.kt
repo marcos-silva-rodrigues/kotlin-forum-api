@@ -6,6 +6,7 @@ import com.rodrigues.silva.marcos.forum.dto.TopicoPorCategoriaDto
 import com.rodrigues.silva.marcos.forum.dto.TopicoView
 import com.rodrigues.silva.marcos.forum.model.Topico
 import com.rodrigues.silva.marcos.forum.service.TopicoService
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.validation.Valid
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
@@ -22,6 +23,7 @@ import org.springframework.web.util.UriComponentsBuilder
 
 @RestController
 @RequestMapping("/topicos")
+@SecurityRequirement(name = "bearerAuth")
 class TopicoController(
     private val service: TopicoService
 ) {
