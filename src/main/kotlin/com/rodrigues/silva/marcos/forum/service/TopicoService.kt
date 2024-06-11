@@ -26,7 +26,6 @@ class TopicoService(
 
     val notFoundMessage = "Tópico não encontrado"
 
-    @Cacheable(cacheNames = ["topicos"], key = "#root.method.name")
     fun listar(
         nomeCurso: String?,
         paginacao: Pageable

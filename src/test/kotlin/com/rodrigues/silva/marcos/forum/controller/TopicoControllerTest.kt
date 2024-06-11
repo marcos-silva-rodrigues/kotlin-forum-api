@@ -1,6 +1,7 @@
 package com.rodrigues.silva.marcos.forum.controller
 
 import com.rodrigues.silva.marcos.forum.config.JwtUtil
+import com.rodrigues.silva.marcos.forum.configuration.DatabaseContainerConfiguration
 import com.rodrigues.silva.marcos.forum.integration.TopicoRepositoryTest
 import com.rodrigues.silva.marcos.forum.model.Role
 import org.junit.jupiter.api.BeforeEach
@@ -12,13 +13,17 @@ import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfig
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.MockMvcResultMatchersDsl
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
+import org.testcontainers.junit.jupiter.Testcontainers
 
+@Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class TopicoControllerTest {
+class TopicoControllerTest: DatabaseContainerConfiguration() {
 
     @Autowired
     private lateinit var webApplicationContext: WebApplicationContext
@@ -51,6 +56,7 @@ class TopicoControllerTest {
 
     @Test
     fun `deve retornar codigo 200 quando chamar topicos com token`() {
+
         mockMvc.get(RECURSO) {
             headers {
                 token?.let {
@@ -64,13 +70,16 @@ class TopicoControllerTest {
 
     @Test
     fun `deve retornar codigo 200 quando chamar tópico por id com token`() {
-        mockMvc.get(RECURSO_ID.format("1")) {
-            headers { token?.let {
-                setBearerAuth(it)
-            } }
+        val andExpect = mockMvc.get(RECURSO_ID.format("1")) {
+            headers {
+                token?.let {
+                    setBearerAuth(it)
+                }
+            }
         }.andExpect {
             status { is2xxSuccessful() }
         }
+
     }
 
     private fun gerarToken(): String? {

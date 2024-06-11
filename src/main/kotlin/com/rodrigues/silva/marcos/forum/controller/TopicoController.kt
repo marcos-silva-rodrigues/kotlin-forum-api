@@ -8,6 +8,7 @@ import com.rodrigues.silva.marcos.forum.model.Topico
 import com.rodrigues.silva.marcos.forum.service.TopicoService
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.validation.Valid
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
@@ -28,11 +29,18 @@ class TopicoController(
     private val service: TopicoService
 ) {
 
+    @Value("\${spring.redis.host}")
+    private lateinit var redisHost: String
+
+    @Value("\${spring.redis.port}")
+    private lateinit var redisPort: String
+
     @GetMapping
     fun listar(
         @RequestParam(required = false) nomeCurso: String?,
         @PageableDefault(size = 5, sort = ["dataCriacao"], direction = Sort.Direction.DESC) paginacao: Pageable
     ): Page<TopicoView> {
+        println(redisHost  + ":" + redisPort)
         return service.listar(nomeCurso, paginacao)
     }
 

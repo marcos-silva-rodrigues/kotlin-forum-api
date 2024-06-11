@@ -1,5 +1,6 @@
 package com.rodrigues.silva.marcos.forum.integration
 
+import com.rodrigues.silva.marcos.forum.configuration.DatabaseContainerConfiguration
 import com.rodrigues.silva.marcos.forum.dto.TopicoPorCategoriaDto
 import com.rodrigues.silva.marcos.forum.model.TopicoTest
 import com.rodrigues.silva.marcos.forum.repository.TopicoRepository
@@ -18,29 +19,14 @@ import org.testcontainers.junit.jupiter.Testcontainers
 @DataJpaTest
 @Testcontainers
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class TopicoRepositoryTest {
+class TopicoRepositoryTest: DatabaseContainerConfiguration() {
 
     @Autowired
     private lateinit var topicoRepository: TopicoRepository
 
     private val topico = TopicoTest.build()
 
-    companion object {
-        @Container
-        private val mysqlContainer = MySQLContainer<Nothing>("mysql:latest").apply {
-            withDatabaseName("testdb")
-            withUsername("joao")
-            withPassword("12345")
-        }
 
-        @JvmStatic
-        @DynamicPropertySource
-        fun properties(registry: DynamicPropertyRegistry) {
-            registry.add("spring.datasource.url", mysqlContainer::getJdbcUrl);
-            registry.add("spring.datasource.password", mysqlContainer::getPassword);
-            registry.add("spring.datasource.username", mysqlContainer::getUsername);
-        }
-    }
 
     @Test
     fun `deve gerar um relatorio`() {
