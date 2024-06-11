@@ -31,6 +31,7 @@ class SecurityConfiguration(
             authorizeRequests {
                 authorize(HttpMethod.POST,"/login", permitAll)
                 authorize("/topicos", hasAuthority("LEITURA_ESCRITA"))
+                authorize("/respostas", hasAuthority("LEITURA_ESCRITA"))
                 authorize(HttpMethod.GET, "/swagger-ui/*", permitAll)
                 authorize(HttpMethod.GET, "/v3/api-docs/**", permitAll)
                 authorize("*", authenticated)
