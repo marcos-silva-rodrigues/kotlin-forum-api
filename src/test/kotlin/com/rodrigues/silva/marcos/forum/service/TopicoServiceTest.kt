@@ -64,6 +64,6 @@ class TopicoServiceTest {
             topicoService.buscarPorId(1)
         }
 
-        assertThat(atual.message).isEqualTo("Topico nao encontrado!")
+        assertThat(atual.message).isEqualTo("Tópico não encontrado")
     }
 }

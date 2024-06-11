@@ -19,10 +19,10 @@ spring:
     host: localhost
     port: 6379
   mail:
-    host: ${MAIL_HOST}
-    port: ${MAIL_PORT}
-    username: ${MAIL_USER}
-    password: ${MAIL_PASSWORD}
+    host: ${MAIL_HOST:""}
+    port: ${MAIL_PORT:2525}
+    username: ${MAIL_USER:""}
+    password: ${MAIL_PASSWORD:""}
     properties:
       mail:
         transport:
